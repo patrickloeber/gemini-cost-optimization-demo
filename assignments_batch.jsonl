@@ -1,0 +1,5 @@
+{"key": "student-001", "request": {"content": {"parts": [{"text": "Essay on photosynthesis in marine ecosystems. Phytoplankton contribute over 50% of Earth's oxygen production through carbon fixation in the photic zone."}]}}}
+{"key": "student-002", "request": {"content": {"parts": [{"text": "Code submission for binary search algorithm. Iterative approach checks the middle element of a sorted array, narrowing search space by half in O(log n)."}]}}}
+{"key": "student-003", "request": {"content": {"parts": [{"text": "Summary of the French Revolution. The storming of the Bastille on July 14, 1789, symbolized the collapse of royalty and Ancien Regime."}]}}}
+{"key": "student-004", "request": {"content": {"parts": [{"text": "Lab report on electric circuits. Ohm's law defines V = IR, showing current is proportional to voltage and inversely proportional to resistance."}]}}}
+{"key": "student-005", "request": {"content": {"parts": [{"text": "Analysis of Shakespeare's Hamlet. Hamlet's internal soliloquy 'To be or not to be' explores existential dread, action vs. inaction, and mortality."}]}}}
