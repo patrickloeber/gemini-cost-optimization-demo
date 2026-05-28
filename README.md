@@ -102,3 +102,28 @@ To learn more about the technical specifications, best practices, and API parame
 * **Pathway 2**: [Gemini Context Caching Guide](https://ai.google.dev/gemini-api/docs/caching)
 * **Pathway 2b**: [Gemini Interactions API Overview](https://ai.google.dev/gemini-api/docs/interactions/interactions-overview)
 * **Pathway 3**: [Gemini Flex Inference Documentation](https://ai.google.dev/gemini-api/docs/flex-inference)
+
+---
+
+## 💡 Best Practices & Production Patterns
+
+### 📦 Batch API
+* **Segment Batches**: Break large datasets into smaller, manageable sub-batches to get intermediate results sooner and limit failed job risks.
+* **Webhooks**: Configure webhook callback endpoints to handle job completion asynchronously instead of resource-heavy polling loops.
+* **Dry-Run Schema**: Always test a single request locally first to avoid large-scale validation or processing failures.
+
+### 💾 Context Caching (Implicit & Explicit)
+* **Implicit Caching (Interactions API)**:
+  * Place large, static components (e.g., system instructions, textbook PDFs) at the very beginning of your prompt structure:  
+    `[System Instruction + Textbook PDF] (CACHED) ➔ [User Query] (DYNAMIC)`
+  * Group/cluster requests with identical prefixes within a short timeframe to maximize cache reuse.
+* **Explicit Caching**:
+  * **Optimize TTL**: Tune the cache Time-To-Live (TTL) to match typical user session gaps (e.g., 15 minutes) to avoid paying for idle storage while preserving reuse windows.
+* **Telemetry & Monitoring**:
+  * Regularly inspect standard metric fields in `usage_metadata` (specifically cache hit rates, latency impact, and proportion of tokens read from the cache) to continuously refine your partition strategies.
+
+### ⚡ Flex Inference Tier
+* **Configure Timeouts**: Set custom client-side timeouts to proactively handle off-peak scheduling variability and avoid indefinite connection hangs.
+* **Mandatory Retries**: Always design background tasks with robust exponential backoff handlers to gracefully handle capacity-based retries.
+* **Dynamic Fallback Routing**: The Flex tier does not automatically fallback to the Standard tier if capacity is fully saturated; you must implement your own logic to dynamically route queries to the Standard tier when meeting capacity constraints.
+* **Decoupled Task Queues**: Avoid calling the Flex tier directly from the main request-response thread. Wrap queries inside a reliable background task queue (e.g., Celery, Redis Queue) to isolate downstream processing.
