@@ -12,6 +12,7 @@ A Python-only command-line repository demonstrating high-performance **Gemini AP
 /optimization-demo
 ├── 1_batch_ingest.py           # Pathway 1: Ingestion Layer (Batch API + gemini-embedding-2)
 ├── 2_tutor_cache.py            # Pathway 2: Interactive Tutoring (Context Caching + gemini-3.5-flash)
+├── 2b_tutor_interactions.py    # Pathway 2b: Tutoring (Interactions API stateful chatbot)
 ├── 3_planner_flex.py           # Pathway 3: Study Planner (Flex Inference Tier + gemini-3.5-flash)
 ├── utilities.py                # Shared security checking, Rich Console styling, and Pricing engines
 ├── assignments_batch.jsonl     # Static manifest source containing 5 student essays
@@ -31,6 +32,11 @@ A Python-only command-line repository demonstrating high-performance **Gemini AP
 * **Optimization Lever**: **Explicit Context Caching** (up to **90% cheaper** input reads).
 * **How It Works**: Caches the entire `book.txt` (~151,506 tokens) on the Gemini API, and runs a multi-turn Q&A chat session.
 * **Telemetry**: Calculates standard vs cached rates, showing exact hit rate (**`99.98%`**) and cost savings (**up to `87% Off`**).
+
+### 2b. Stateful Tutoring — [2b_tutor_interactions.py](2b_tutor_interactions.py)
+* **Optimization Lever**: **Server-Side Stateful Interactions** (with automatic, implicit context caching).
+* **How It Works**: Leverages the new stateful **Interactions API**, passing `previous_interaction_id` to link turns and maintain history on the server side without manual client history arrays.
+* **Telemetry**: Displays detailed cost accounting showing the token usage from both turns.
 
 ### 3. Custom Study Planner — [3_planner_flex.py](3_planner_flex.py)
 * **Optimization Lever**: **Flex Inference Tier** (flat **50% discount** on sheddable off-peak capacity).
@@ -58,22 +64,30 @@ All non-visual logic is consolidated in `utilities.py` to keep the core scripts 
    ```
 
 2. **Configure API Key**:
-   Export your Gemini API Key (get a free one at [ai.studio](ai.studio)) as an environment variable:
+   Export your Gemini API Key (get one at [ai.studio](ai.studio)) as an environment variable:
    ```bash
    export GEMINI_API_KEY="your-actual-gemini-api-key"
    ```
 
-2. **Run Ingestion Layer (Pathway 1)**:
+   > [!IMPORTANT]
+   > **Free Tier Compatibility**: The **Batch API (Pathway 1)** is **not available** on the Gemini API Free Tier and requires a paid billing plan. However, **all other pathways** (Context Caching, Interactions API, and Flex Inference Tier) can be followed using a **free API key**!
+
+3. **Run Ingestion Layer (Pathway 1)**:
    ```bash
    python3 1_batch_ingest.py
    ```
 
-3. **Run Context Caching Chatbot (Pathway 2)**:
+4. **Run Context Caching Chatbot (Pathway 2)**:
    ```bash
    python3 2_tutor_cache.py
    ```
 
-4. **Run Flex Planner Agent (Pathway 3)**:
+5. **Run Interactions API Chatbot (Pathway 2b)**:
+   ```bash
+   python3 2b_tutor_interactions.py
+   ```
+
+6. **Run Flex Planner Agent (Pathway 3)**:
    ```bash
    python3 3_planner_flex.py
    ```
@@ -86,4 +100,5 @@ To learn more about the technical specifications, best practices, and API parame
 * **Overview**: [Gemini API Optimization Guide](https://ai.google.dev/gemini-api/docs/optimization)
 * **Pathway 1**: [Gemini Batch API Reference](https://ai.google.dev/gemini-api/docs/batch-api?batch=file)
 * **Pathway 2**: [Gemini Context Caching Guide](https://ai.google.dev/gemini-api/docs/caching)
+* **Pathway 2b**: [Gemini Interactions API Overview](https://ai.google.dev/gemini-api/docs/interactions/interactions-overview)
 * **Pathway 3**: [Gemini Flex Inference Documentation](https://ai.google.dev/gemini-api/docs/flex-inference)
